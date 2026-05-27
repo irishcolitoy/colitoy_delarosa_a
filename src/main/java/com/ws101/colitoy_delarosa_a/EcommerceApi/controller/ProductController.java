@@ -39,9 +39,27 @@ public class ProductController {
         return ResponseEntity.ok(updatedProduct);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<Product> patchProduct(@PathVariable Long id, @RequestBody Product product) {
+        Product updatedProduct = productService.patchProduct(id, product);
+        return ResponseEntity.ok(updatedProduct);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/filter/category/{category}")
+    public ResponseEntity<List<Product>> filterByCategory(@PathVariable String category) {
+        return ResponseEntity.ok(productService.getProductsByCategory(category));
+    }
+
+    @GetMapping("/filter/price")
+    public ResponseEntity<List<Product>> filterByPrice(
+            @RequestParam Double min,
+            @RequestParam Double max) {
+        return ResponseEntity.ok(productService.getProductsByPriceRange(min, max));
     }
 }

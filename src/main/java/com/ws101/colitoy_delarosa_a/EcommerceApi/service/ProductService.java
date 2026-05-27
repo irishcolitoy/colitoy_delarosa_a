@@ -4,6 +4,7 @@ import com.ws101.colitoy_delarosa_a.EcommerceApi.model.Product;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -39,8 +40,37 @@ public class ProductService {
         return existingProduct;
     }
 
+    public Product patchProduct(Long id, Product productDetails) {
+        Product existingProduct = getProductById(id);
+        if (productDetails.getName() != null)
+            existingProduct.setName(productDetails.getName());
+        if (productDetails.getPrice() != null)
+            existingProduct.setPrice(productDetails.getPrice());
+        if (productDetails.getDescription() != null)
+            existingProduct.setDescription(productDetails.getDescription());
+        if (productDetails.getCategory() != null)
+            existingProduct.setCategory(productDetails.getCategory());
+        if (productDetails.getImageUrl() != null)
+            existingProduct.setImageUrl(productDetails.getImageUrl());
+        if (productDetails.getStockQuantity() != null)
+            existingProduct.setStockQuantity(productDetails.getStockQuantity());
+        return existingProduct;
+    }
+
     public void deleteProduct(Long id) {
         Product productToDelete = getProductById(id);
         productList.remove(productToDelete);
+    }
+
+    public List<Product> getProductsByCategory(String category) {
+        return productList.stream()
+                .filter(p -> p.getCategory().equalsIgnoreCase(category))
+                .collect(Collectors.toList());
+    }
+
+    public List<Product> getProductsByPriceRange(Double min, Double max) {
+        return productList.stream()
+                .filter(p -> p.getPrice() >= min && p.getPrice() <= max)
+                .collect(Collectors.toList());
     }
 }
