@@ -1,4 +1,4 @@
-package com.ws101.colitoy_delarosa_a.model;
+package com.ws101.colitoy_delarosa_a.EcommerceApi.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,7 @@ public class Order {
     private Long id;
     private String orderNumber;
     private LocalDateTime orderDate;
-    private String status; // hal: PENDING, SHIPPED, DELIVERED, CANCELLED
+    private String status;
     private Double totalAmount;
     private List<OrderItem> items;
 }

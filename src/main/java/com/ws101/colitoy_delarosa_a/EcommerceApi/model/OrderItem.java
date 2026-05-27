@@ -1,4 +1,4 @@
-package com.ws101.colitoy_delarosa_a.model;
+package com.ws101.colitoy_delarosa_a.EcommerceApi.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
