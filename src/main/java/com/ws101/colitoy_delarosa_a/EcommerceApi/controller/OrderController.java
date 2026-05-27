@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/api/v1/orders")
 public class OrderController {
 
     private final OrderService orderService;
@@ -18,26 +18,38 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<Order> getAllOrders() {
-        return orderService.getAllOrders();
+    public ResponseEntity<List<Order>> getAllOrders() {
+        return ResponseEntity.ok(orderService.getAllOrders());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
-        return orderService.getOrderById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(orderService.getOrderById(id));
     }
 
     @PostMapping
     public ResponseEntity<Order> createOrder(@RequestBody Order order) {
-        Order created = orderService.createOrder(order);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        Order createdOrder = orderService.createOrder(order);
+        return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}/status")
-    public ResponseEntity<Order> updateOrderStatus(@PathVariable Long id, @RequestParam String status) {
-        Order updated = orderService.updateOrderStatus(id, status);
-        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+    @PutMapping("/{id}")
+    public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody Order order) {
+        Order updatedOrder = orderService.updateOrder(id, order);
+        return ResponseEntity.ok(updatedOrder);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
+        orderService.deleteOrder(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
+        if (ex.getMessage().contains("not found")) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
