@@ -1,12 +1,25 @@
 package com.ws101.colitoy_delarosa_a.EcommerceApi.exception;
 
+import java.time.LocalDateTime;
+
 public class ErrorResponse {
+
+    private LocalDateTime timestamp;
     private int status;
     private String message;
 
     public ErrorResponse(int status, String message) {
+        this.timestamp = LocalDateTime.now();
         this.status = status;
         this.message = message;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 
     public int getStatus() {
