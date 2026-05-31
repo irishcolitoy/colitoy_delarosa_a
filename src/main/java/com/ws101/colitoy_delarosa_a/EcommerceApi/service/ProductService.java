@@ -9,6 +9,7 @@ import java.util.List;
 
 @Service
 public class ProductService {
+
     @Autowired
     private ProductRepository repo;
 
@@ -26,5 +27,9 @@ public class ProductService {
 
     public void deleteById(Long id) {
         repo.deleteById(id);
+    }
+
+    public List<Product> filterByCategory(String category) {
+        return repo.findByCategory(category);
     }
 }

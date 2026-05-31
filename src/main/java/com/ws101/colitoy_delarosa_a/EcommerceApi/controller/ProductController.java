@@ -37,6 +37,13 @@ public class ProductController {
         return ResponseEntity.ok(p);
     }
 
+    @GetMapping("/filter")
+public List<Product> filter(
+        @RequestParam String category) {
+
+    return service.filterByCategory(category);
+}
+
     @PutMapping("/{id}")
     public ResponseEntity<Product> update(
             @PathVariable Long id,
