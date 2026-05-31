@@ -29,7 +29,11 @@ public class ProductService {
         repo.deleteById(id);
     }
 
-    public List<Product> filterByCategory(String category) {
-        return repo.findByCategory(category);
+    public List<Product> filterByCategory(String categoryName) {
+        return repo.findByCategoryName(categoryName);
+    }
+
+    public List<Product> filterByPriceRange(double min, double max) {
+        return repo.findProductsByPriceRange(min, max);
     }
 }
