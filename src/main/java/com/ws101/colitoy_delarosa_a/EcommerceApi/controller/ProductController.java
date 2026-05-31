@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> create(@RequestBody Product p) {
+    public ResponseEntity<Product> create(@Valid @RequestBody Product p) {
         return new ResponseEntity<>(service.save(p), HttpStatus.CREATED);
     }
 
@@ -38,11 +39,11 @@ public class ProductController {
     }
 
     @GetMapping("/filter")
-public List<Product> filter(
-        @RequestParam String category) {
+    public List<Product> filter(
+            @RequestParam String category) {
 
-    return service.filterByCategory(category);
-}
+        return service.filterByCategory(category);
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> update(
