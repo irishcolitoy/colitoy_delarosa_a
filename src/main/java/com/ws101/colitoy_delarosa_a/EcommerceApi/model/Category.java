@@ -2,8 +2,10 @@ package com.ws101.colitoy_delarosa_a.EcommerceApi.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -17,6 +19,7 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Product> products = new ArrayList<>();
 }

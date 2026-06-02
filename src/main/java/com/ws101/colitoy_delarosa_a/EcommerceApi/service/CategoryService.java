@@ -2,8 +2,10 @@ package com.ws101.colitoy_delarosa_a.EcommerceApi.service;
 
 import com.ws101.colitoy_delarosa_a.EcommerceApi.model.Category;
 import com.ws101.colitoy_delarosa_a.EcommerceApi.repository.CategoryRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -22,7 +24,7 @@ public class CategoryService {
 
     public Category getCategoryById(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Category not found with id: " + id));
     }
 
     public Category createCategory(Category category) {
@@ -31,12 +33,14 @@ public class CategoryService {
 
     public Category updateCategory(Long id, Category categoryDetails) {
         Category existingCategory = getCategoryById(id);
+
         existingCategory.setName(categoryDetails.getName());
+
         return categoryRepository.save(existingCategory);
     }
 
     public void deleteCategory(Long id) {
-        Category categoryToDelete = getCategoryById(id);
-        categoryRepository.delete(categoryToDelete);
+        Category category = getCategoryById(id);
+        categoryRepository.delete(category);
     }
 }

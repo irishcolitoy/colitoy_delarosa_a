@@ -2,8 +2,10 @@ package com.ws101.colitoy_delarosa_a.EcommerceApi.service;
 
 import com.ws101.colitoy_delarosa_a.EcommerceApi.model.Product;
 import com.ws101.colitoy_delarosa_a.EcommerceApi.repository.ProductRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -22,17 +24,15 @@ public class ProductService {
 
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + id));
     }
 
     public Product createProduct(Product product) {
-        if (product.getCategory() == null) {
-            throw new RuntimeException("Product must belong to a Category.");
-        }
         return productRepository.save(product);
     }
 
     public Product updateProduct(Long id, Product productDetails) {
+
         Product existingProduct = getProductById(id);
 
         existingProduct.setName(productDetails.getName());
@@ -47,8 +47,8 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id) {
-        Product productToDelete = getProductById(id);
-        productRepository.delete(productToDelete);
+        Product product = getProductById(id);
+        productRepository.delete(product);
     }
 
     public List<Product> getProductsByCategory(String categoryName) {

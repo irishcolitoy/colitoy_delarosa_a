@@ -1,9 +1,11 @@
 package com.ws101.colitoy_delarosa_a.EcommerceApi.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
-import java.util.List;
+
 import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -19,7 +21,7 @@ public class Order {
     private Double totalAmount;
     private String status;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<OrderItem> orderItems = new ArrayList<>();
-    // 👆 Ito lang ang karaniwang wala pa sa inyo at kailangang idagdag
 }
