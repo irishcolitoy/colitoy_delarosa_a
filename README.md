@@ -153,15 +153,19 @@ Responsive Check
 The application was tested using browser developer tools using mobile view mode (iPhone 12 Pro) to verify that dynamic content loads correctly on smaller screen sizes.
 
 ---
-# Screenshots
+## Screenshots
 
-![Database Table](screenshots/database-table.png)
+### Database Table
+![Database Table](./screenshots/database-table.png)
 
-![Browser Console](screenshots/browser-console.png)
+### Browser Console
+![Browser Console](./screenshots/browser-console.png)
 
-![Frontend Output](screenshots/frontend-output.png)
+### Frontend Output
+![Frontend Output](./screenshots/frontend-output.png)
 
-![Responsive View](screenshots/responsive-view.png)
+### Responsive View
+![Responsive View](./screenshots/responsive-view.png)
 
 ---
 
