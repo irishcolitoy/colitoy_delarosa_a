@@ -50,7 +50,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/register").permitAll()
-                        .requestMatchers("/products").permitAll()
+                        .requestMatchers("api/products/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form.permitAll())
                 .logout(logout -> logout.permitAll());
