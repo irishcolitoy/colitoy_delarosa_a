@@ -1,5 +1,6 @@
 package com.ws101.colitoy_delarosa_a.EcommerceApi.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import com.ws101.colitoy_delarosa_a.EcommerceApi.model.Product;
 import com.ws101.colitoy_delarosa_a.EcommerceApi.service.ProductService;
 import org.springframework.http.HttpStatus;
@@ -27,18 +28,21 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductById(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         Product savedProduct = productService.createProduct(product);
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product productDetails) {
         Product updatedProduct = productService.updateProduct(id, productDetails);
         return ResponseEntity.ok(updatedProduct);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
