@@ -2,6 +2,7 @@ package com.ws101.colitoy_delarosa_a.EcommerceApi.controller;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import com.ws101.colitoy_delarosa_a.EcommerceApi.model.Product;
+import jakarta.validation.Valid;
 import com.ws101.colitoy_delarosa_a.EcommerceApi.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class ProductController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+    public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product) {
         Product savedProduct = productService.createProduct(product);
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
