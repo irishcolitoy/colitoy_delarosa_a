@@ -2,9 +2,19 @@ async function fetchProducts() {
     try {
         const response = await fetch("http://localhost:8080/api/products");
 
-        if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`);
-        }
+    if (response.status === 401) {
+        window.location.href = "/login";
+        return;
+}
+
+    if (response.status === 403) {
+        alert("Access Denied");
+        return;
+}
+
+    if (!response.ok) {
+        throw new Error(`HTTP Error! ${response.status}`);
+}
 
         const products = await response.json();
 
