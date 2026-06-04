@@ -47,8 +47,8 @@ public class SecurityConfig {
             throws Exception {
 
         http
-                .csrf(csrf -> {
-                })
+                .csrf(csrf -> csrf.disable())
+
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/register").permitAll()
                         .requestMatchers("api/products/**").permitAll()
