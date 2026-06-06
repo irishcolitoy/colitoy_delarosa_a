@@ -1,61 +1,69 @@
 package com.ws101.colitoy_delarosa_a.EcommerceApi.config;
 
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ws101.colitoy_delarosa_a.EcommerceApi.security.JwtAuthenticationFilter;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import org.springframework.security.config.http.SessionCreationPolicy;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
 
-import com.ws101.colitoy_delarosa_a.EcommerceApi.model.User;
-import com.ws101.colitoy_delarosa_a.EcommerceApi.repository.UserRepository;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private UserRepository userRepository;
+        private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+        public SecurityConfig(
+                        JwtAuthenticationFilter jwtAuthenticationFilter) {
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return username -> {
+                this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        }
 
-            User user = userRepository
-                    .findByUsername(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        @Bean
+        public SecurityFilterChain securityFilterChain(
+                        HttpSecurity http)
+                        throws Exception {
 
-            return org.springframework.security.core.userdetails.User
-                    .withUsername(user.getUsername())
-                    .password(user.getPassword())
-                    .roles(user.getRole())
-                    .build();
-        };
-    }
+                http
+                                .csrf(csrf -> csrf.disable())
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)
-            throws Exception {
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(
+                                                                SessionCreationPolicy.STATELESS))
 
-        http
-                .csrf(csrf -> csrf.disable())
+                                .authorizeHttpRequests(auth -> auth
 
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/register").permitAll()
-                        .requestMatchers("api/products/**").permitAll()
-                        .anyRequest().authenticated())
-                .formLogin(form -> form.permitAll())
-                .logout(logout -> logout.permitAll());
+                                                .requestMatchers(
+                                                                "/",
+                                                                "/index.html",
+                                                                "/login.html",
+                                                                "/script.js",
+                                                                "/api/v1/auth/**",
+                                                                "/api/products/**",
+                                                                "/api/categories/**")
+                                                .permitAll()
 
-        return http.build();
-    }
+                                                .anyRequest()
+                                                .authenticated())
+
+                                .addFilterBefore(
+                                                jwtAuthenticationFilter,
+                                                UsernamePasswordAuthenticationFilter.class);
+
+                return http.build();
+        }
+
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 }

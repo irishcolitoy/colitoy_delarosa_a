@@ -5,27 +5,79 @@
 </head>
 <body>
 
-<h2>Login</h2>
+    <h2>Login</h2>
 
-<form action="/login" method="post">
-
-    <input type="hidden"
-            name="_csrf"
-            value="${_csrf.token}" />
-
-    <label>Username</label>
-    <input type="text" name="username">
+    <input
+        type="text"
+        id="username"
+        placeholder="Username">
 
     <br><br>
 
-    <label>Password</label>
-    <input type="password" name="password">
+    <input
+        type="password"
+        id="password"
+        placeholder="Password">
 
     <br><br>
 
-    <button type="submit">Login</button>
+    <button onclick="login()">
+        Login
+    </button>
 
-</form>
+    <script>
+
+        async function login() {
+
+            const username =
+                document.getElementById("username").value;
+
+            const password =
+                document.getElementById("password").value;
+
+            try {
+
+                const response = await fetch(
+                    "http://localhost:8080/api/v1/auth/login",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            username: username,
+                            password: password
+                        })
+                    }
+                );
+
+                if (!response.ok) {
+                    alert("Invalid username or password");
+                    return;
+                }
+
+                const data = await response.json();
+
+                localStorage.setItem(
+                    "token",
+                    data.token
+                );
+
+                alert("Login Success!");
+
+                window.location.href =
+                    "/index.html";
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert("Login Failed");
+
+            }
+        }
+
+    </script>
 
 </body>
 </html>
